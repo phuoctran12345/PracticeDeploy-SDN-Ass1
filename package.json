@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "tsc --skipLibCheck",
+    "build": "echo 'No build step - plain Node/Express'",
     "start": "node app.js",
     "e2e": "cross-env DOTENV_CONFIG_PATH=.env.e2e nodemon",
     "create-car": "node createCar.js",
