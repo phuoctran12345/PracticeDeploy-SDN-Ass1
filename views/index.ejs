@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoRent Pro – Thuê xe cao cấp</title>
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- AOS Animation -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="landing-page">
+
+  <!-- Video Background Hero Section -->
+  <section class="hero-section">
+    <!-- Video Background -->
+    <div class="video-container">
+      <video autoplay muted loop playsinline class="hero-video">
+        <source src="/assets/Tạo_Video_Landing_Page_Bán_Xe.mp4" type="video/mp4">
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+
+    <!-- Navbar Transparent -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-transparent">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="bi bi-car-front-fill me-2"></i>AutoRent Pro
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" href="/">Trang chủ</a></li>
+            <li class="nav-item"><a class="nav-link" href="/cars">Xe</a></li>
+            <li class="nav-item"><a class="nav-link" href="/bookings">Đặt xe</a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin/summary">Admin</a></li>
+          </ul>
+          <a href="/bookings/new" class="btn btn-outline-light ms-lg-3">
+            <i class="bi bi-calendar-check me-1"></i>Đặt xe ngay
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <div class="col-lg-8" data-aos="fade-up" data-aos-duration="1000">
+            <span class="hero-badge">Dịch vụ thuê xe cao cấp</span>
+            <h1 class="hero-title">
+              Trải nghiệm<br>
+              <span class="text-gradient">Đẳng cấp</span> trên mọi hành trình
+            </h1>
+            <p class="hero-subtitle">
+              Khám phá bộ sưu tập xe sang trọng của chúng tôi.
+              Từ sedan thanh lịch đến SUV mạnh mẽ, AutoRent Pro mang đến
+              trải nghiệm lái xe hoàn hảo cho mọi chuyến đi.
+            </p>
+            <div class="hero-buttons">
+              <a href="/cars" class="btn btn-primary btn-lg me-3">
+                <i class="bi bi-collection me-2"></i>Xem dàn xe
+              </a>
+              <a href="/bookings/new" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-calendar-plus me-2"></i>Đặt xe ngay
+              </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
+              <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Xe cao cấp</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Khách hàng</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-number">5K+</div>
+                <div class="stat-label">Chuyến đi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator">
+        <div class="mouse"></div>
+        <span>Cuộn xuống</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section py-5">
+    <div class="container py-5">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <span class="section-badge">Tại sao chọn chúng tôi</span>
+        <h2 class="section-title">Dịch vụ <span class="text-gradient">Đẳng cấp</span></h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h4>An toàn tuyệt đối</h4>
+            <p>Xe được bảo dưỡng định kỳ, đảm bảo an toàn tối đa cho mọi hành trình</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-currency-dollar"></i>
+            </div>
+            <h4>Giá cả hợp lý</h4>
+            <p>Chi phí thuê xe cạnh tranh, nhiều ưu đãi hấp dẫn cho khách hàng thân thiết</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-clock-history"></i>
+            </div>
+            <h4>Hỗ trợ 24/7</h4>
+            <p>Đội ngũ hỗ trợ chuyên nghiệp, sẵn sàng phục vụ bạn mọi lúc mọi nơi</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="bi bi-geo-alt"></i>
+            </div>
+            <h4>Giao xe tận nơi</h4>
+            <p>Dịch vụ giao và nhận xe tận nơi, thuận tiện cho mọi khách hàng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Cars Section -->
+  <section class="cars-section py-5 bg-dark">
+    <div class="container py-5">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <span class="section-badge">Dòng xe phổ biến</span>
+        <h2 class="section-title text-white">Xe <span class="text-gradient">Hot</span> nhất</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="car-card">
+            <div class="car-image">
+              <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&h=250&fit=crop"
+                alt="BMW Series">
+              <span class="car-badge">Hot</span>
+            </div>
+            <div class="car-info">
+              <h5>BMW Series 5</h5>
+              <p class="car-specs">
+                <span><i class="bi bi-people"></i> 5 chỗ</span>
+                <span><i class="bi bi-gear"></i> Tự động</span>
+              </p>
+              <div class="car-footer">
+                <div class="car-price">
+                  <span class="price">1,500,000đ</span>
+                  <span class="per">/ngày</span>
+                </div>
+                <a href="/cars" class="btn btn-sm btn-primary">Chi tiết</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+          <div class="car-card">
+            <div class="car-image">
+              <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=400&h=250&fit=crop"
+                alt="Mercedes">
+              <span class="car-badge premium">Premium</span>
+            </div>
+            <div class="car-info">
+              <h5>Mercedes C-Class</h5>
+              <p class="car-specs">
+                <span><i class="bi bi-people"></i> 5 chỗ</span>
+                <span><i class="bi bi-gear"></i> Tự động</span>
+              </p>
+              <div class="car-footer">
+                <div class="car-price">
+                  <span class="price">1,800,000đ</span>
+                  <span class="per">/ngày</span>
+                </div>
+                <a href="/cars" class="btn btn-sm btn-primary">Chi tiết</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="300">
+          <div class="car-card">
+            <div class="car-image">
+              <img src="https://images.unsplash.com/photo-1619682817481-e994891cd1f5?w=400&h=250&fit=crop" alt="Audi">
+              <span class="car-badge">Hot</span>
+            </div>
+            <div class="car-info">
+              <h5>Audi A6</h5>
+              <p class="car-specs">
+                <span><i class="bi bi-people"></i> 5 chỗ</span>
+                <span><i class="bi bi-gear"></i> Tự động</span>
+              </p>
+              <div class="car-footer">
+                <div class="car-price">
+                  <span class="price">2,000,000đ</span>
+                  <span class="per">/ngày</span>
+                </div>
+                <a href="/cars" class="btn btn-sm btn-primary">Chi tiết</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5" data-aos="fade-up">
+        <a href="/cars" class="btn btn-outline-light btn-lg">
+          Xem tất cả xe <i class="bi bi-arrow-right ms-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works py-5">
+    <div class="container py-5">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <span class="section-badge">Quy trình đơn giản</span>
+        <h2 class="section-title">Thuê xe <span class="text-gradient">dễ dàng</span></h2>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">
+              <i class="bi bi-search"></i>
+            </div>
+            <h4>Chọn xe</h4>
+            <p>Duyệt qua bộ sưu tập xe đa dạng và chọn xe phù hợp với nhu cầu của bạn</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">
+              <i class="bi bi-calendar-check"></i>
+            </div>
+            <h4>Đặt lịch</h4>
+            <p>Chọn ngày nhận xe và trả xe, điền thông tin để hoàn tất đặt chỗ</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+              <i class="bi bi-car-front"></i>
+            </div>
+            <h4>Nhận xe</h4>
+            <p>Đến địa điểm nhận xe hoặc chúng tôi giao xe tận nơi cho bạn</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card" data-aos="zoom-in">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h2>Sẵn sàng cho chuyến đi tiếp theo?</h2>
+            <p>Đặt xe ngay hôm nay và nhận ưu đãi đặc biệt cho lần thuê đầu tiên!</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a href="/bookings/new" class="btn btn-light btn-lg">
+              <i class="bi bi-calendar-plus me-2"></i>Đặt xe ngay
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer py-5 bg-dark text-white">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <h5><i class="bi bi-car-front-fill me-2"></i>AutoRent Pro</h5>
+          <p class="text-muted mt-3">
+            Dịch vụ cho thuê xe cao cấp hàng đầu Việt Nam.
+            Chúng tôi cam kết mang đến trải nghiệm thuê xe tốt nhất cho khách hàng.
+          </p>
+          <div class="social-links mt-4">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-youtube"></i></a>
+            <a href="#"><i class="bi bi-tiktok"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4">
+          <h6>Liên kết</h6>
+          <ul class="footer-links">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/cars">Xe cho thuê</a></li>
+            <li><a href="/bookings">Đặt xe</a></li>
+            <li><a href="/admin/summary">Admin</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-md-4">
+          <h6>Dịch vụ</h6>
+          <ul class="footer-links">
+            <li><a href="#">Thuê xe ngắn hạn</a></li>
+            <li><a href="#">Thuê xe dài hạn</a></li>
+            <li><a href="#">Xe cưới</a></li>
+            <li><a href="#">Xe du lịch</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+          <h6>Liên hệ</h6>
+          <ul class="footer-contact">
+            <li><i class="bi bi-geo-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+            <li><i class="bi bi-telephone"></i> 1900 1234</li>
+            <li><i class="bi bi-envelope"></i> contact@autorentpro.vn</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="my-4 opacity-25">
+
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0 text-muted small">© 2024 AutoRent Pro. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-0 text-muted small">Designed with <i class="bi bi-heart-fill text-danger"></i> for best
+            experience</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      once: true,
+      duration: 800
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function () {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('navbar-scrolled');
+      } else {
+        navbar.classList.remove('navbar-scrolled');
+      }
+    });
+  </script>
+</body>
+
+</html>

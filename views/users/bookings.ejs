@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container my-4">
+  <h1 class="mb-4">Lịch sử thuê xe – <%= user.name %></h1>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <a href="/users/<%= user._id %>" class="btn btn-outline-secondary">← Thông tin user</a>
+    </div>
+  </div>
+  <% if (bookings && bookings.length) { %>
+    <div class="card shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+          <thead class="table-light">
+            <tr><th>Xe</th><th>Bắt đầu</th><th>Kết thúc</th><th>Tổng tiền</th><th>Trạng thái</th><th></th></tr>
+          </thead>
+          <tbody>
+            <% bookings.forEach(function(b) { %>
+              <tr>
+                <td><%= b.carId ? (b.carId.brand + ' ' + b.carId.model) : '-' %></td>
+                <td><%= b.startDate ? new Date(b.startDate).toLocaleDateString('vi-VN') : '-' %></td>
+                <td><%= b.endDate ? new Date(b.endDate).toLocaleDateString('vi-VN') : '-' %></td>
+                <td><%= b.totalPrice != null ? b.totalPrice.toLocaleString('vi-VN') : '-' %> đ</td>
+                <td><span class="badge bg-<%= b.bookingStatus === 'completed' ? 'success' : b.bookingStatus === 'cancelled' ? 'secondary' : 'info' %>"><%= b.bookingStatus %></span></td>
+                <td><a href="/bookings/<%= b._id %>" class="btn btn-sm btn-outline-primary">Chi tiết</a></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="alert alert-info">Chưa có đặt xe nào.</div>
+  <% } %>
+</div>
+<%- include('../partials/footer') %>

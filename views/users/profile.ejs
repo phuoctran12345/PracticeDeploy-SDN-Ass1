@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container my-4">
+  <h1 class="mb-4">Thông tin khách hàng</h1>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Tên</dt>
+        <dd class="col-sm-9"><%= user.name %></dd>
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9"><%= user.email %></dd>
+        <dt class="col-sm-3">Điện thoại</dt>
+        <dd class="col-sm-9"><%= user.phone %></dd>
+        <dt class="col-sm-3">Vai trò</dt>
+        <dd class="col-sm-9"><span class="badge bg-secondary"><%= user.role %></span></dd>
+        <dt class="col-sm-3">Trạng thái</dt>
+        <dd class="col-sm-9"><%= user.status %></dd>
+      </dl>
+      <a href="/users/<%= user._id %>/bookings" class="btn btn-primary">Lịch sử thuê xe</a>
+      <a href="/" class="btn btn-outline-secondary ms-2">Trang chủ</a>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

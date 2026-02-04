@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container my-4">
+  <h1 class="mb-4">Đặt xe mới</h1>
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger" role="alert"><%= error %></div>
+  <% } %>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="POST" action="/bookings">
+        <div class="mb-3">
+          <label class="form-label">Xe (chỉ xe AVAILABLE)</label>
+          <select name="carId" class="form-select" required>
+            <option value="">-- Chọn xe --</option>
+            <% if (cars && cars.length) { cars.forEach(function(c) { %>
+              <option value="<%= c._id %>"><%= c.brand %> <%= c.model %> – <%= c.carId %> (<%= c.pricePerDay.toLocaleString('vi-VN') %> đ/ngày)</option>
+            <% }); } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Khách hàng</label>
+          <select name="userId" class="form-select" required>
+            <option value="">-- Chọn khách --</option>
+            <% if (users && users.length) { users.forEach(function(u) { %>
+              <option value="<%= u._id %>"><%= u.name %> – <%= u.email %></option>
+            <% }); } %>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Ngày bắt đầu</label>
+          <input type="datetime-local" name="startDate" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Ngày kết thúc</label>
+          <input type="datetime-local" name="endDate" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Tạo đặt xe</button>
+        <a href="/bookings" class="btn btn-outline-secondary ms-2">Hủy</a>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

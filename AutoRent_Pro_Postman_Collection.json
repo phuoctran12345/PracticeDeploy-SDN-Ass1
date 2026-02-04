@@ -1,0 +1,150 @@
+{
+  "info": {
+    "name": "AutoRent Pro – API",
+    "description": "Chương 1–10: Auth, Cars, Bookings, Users. Dùng token từ Login/Register.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000/api/v1" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Customer Test\",\n  \"email\": \"customer@test.com\",\n  \"phone\": \"0901234567\",\n  \"password\": \"123456\",\n  \"role\": \"customer\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data && json.data.token) {",
+                  "    pm.collectionVariables.set('token', json.data.token);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@test.com\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cars",
+      "item": [
+        {
+          "name": "GET Cars (public)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/cars"
+          }
+        },
+        {
+          "name": "GET Cars - status AVAILABLE",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/cars?status=AVAILABLE", "host": ["{{baseUrl}}"], "path": ["cars"], "query": [{ "key": "status", "value": "AVAILABLE" }] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings (cần token)",
+      "item": [
+        {
+          "name": "GET Bookings (list)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/bookings"
+          }
+        },
+        {
+          "name": "POST Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carId\": \"<CAR_OBJECT_ID>\",\n  \"startDate\": \"2026-02-10T08:00:00\",\n  \"endDate\": \"2026-02-12T18:00:00\"\n}"
+            },
+            "url": "{{baseUrl}}/bookings"
+          }
+        },
+        {
+          "name": "GET Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/bookings/<BOOKING_ID>"
+          }
+        },
+        {
+          "name": "PATCH Cancel Booking",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/bookings/<BOOKING_ID>/cancel"
+          }
+        },
+        {
+          "name": "GET Owner Bookings (role owner)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/bookings/owner/bookings"
+          }
+        },
+        {
+          "name": "GET Admin Summary (role admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/bookings/admin/bookings/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users (cần token)",
+      "item": [
+        {
+          "name": "GET User Bookings (lịch sử thuê)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{baseUrl}}/users/<USER_ID>/bookings"
+          }
+        }
+      ]
+    }
+  ]
+}

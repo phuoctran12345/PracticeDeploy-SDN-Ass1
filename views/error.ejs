@@ -1,0 +1,10 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<div class="container my-4">
+  <h1 class="mb-4">Lỗi</h1>
+  <div class="alert alert-danger" role="alert">
+    <%= typeof message !== 'undefined' ? message : 'Đã xảy ra lỗi.' %>
+  </div>
+  <a href="/" class="btn btn-primary">Về trang chủ</a>
+</div>
+<%- include('partials/footer') %>

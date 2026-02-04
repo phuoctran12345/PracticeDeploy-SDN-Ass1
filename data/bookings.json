@@ -1,0 +1,13 @@
+[
+  {
+    "bookingId": "BK-1767951535809",
+    "carId": "CAR-101",
+    "customerId": "U789012",
+    "startDate": "2026-01-20T08:00:00Z",
+    "endDate": "2026-01-22T17:00:00Z",
+    "totalPrice": 2400000,
+    "paymentStatus": "unpaid",
+    "bookingStatus": "pending",
+    "createdAt": "2026-01-09T09:38:55.809Z"
+  }
+]

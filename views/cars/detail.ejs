@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container my-4">
+  <h1 class="mb-4"><%= car.brand %> <%= car.model %></h1>
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <dl class="row mb-0">
+        <dt class="col-sm-3">Mã xe</dt>
+        <dd class="col-sm-9"><%= car.carId %></dd>
+        <dt class="col-sm-3">Hãng</dt>
+        <dd class="col-sm-9"><%= car.brand %></dd>
+        <dt class="col-sm-3">Model</dt>
+        <dd class="col-sm-9"><%= car.model %></dd>
+        <dt class="col-sm-3">Giá/ngày</dt>
+        <dd class="col-sm-9"><%= car.pricePerDay ? car.pricePerDay.toLocaleString('vi-VN') : car.pricePerDay %> đ</dd>
+        <dt class="col-sm-3">Trạng thái</dt>
+        <dd class="col-sm-9"><span class="badge bg-<%= car.status === 'AVAILABLE' ? 'success' : car.status === 'RENTED' ? 'warning text-dark' : 'danger' %>"><%= car.status %></span></dd>
+        <% if (car.userId) { %>
+          <dt class="col-sm-3">Chủ xe</dt>
+          <dd class="col-sm-9"><%= car.userId.name %> – <%= car.userId.email %></dd>
+        <% } %>
+      </dl>
+      <a href="/cars" class="btn btn-outline-secondary">← Danh sách xe</a>
+      <a href="/bookings/new?carId=<%= car._id %>" class="btn btn-primary ms-2">Đặt xe này</a>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
