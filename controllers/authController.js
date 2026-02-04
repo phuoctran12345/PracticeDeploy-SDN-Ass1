@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'autorent-pro-secret-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET_KEY || process.env.JWT_SECRET || 'autorent-pro-secret-change-in-production';
 const JWT_EXPIRES = process.env.JWT_EXPIRES || '7d';
 
 // POST /auth/register

@@ -6,8 +6,9 @@ function isConnected() {
   return mongoose.connection.readyState === 1;
 }
 
+const mongoUri = process.env.MONGODB_CONNECTION_STRING || process.env.MONGO_URI;
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(mongoUri)
   .then(() => {
     const { host, port, name } = mongoose.connection;
     console.log('DB Connected!');

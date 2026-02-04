@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'autorent-pro-secret-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET_KEY || process.env.JWT_SECRET || 'autorent-pro-secret-change-in-production';
 
 /**
  * Middleware: xác thực JWT, gắn req.user = { id, role }

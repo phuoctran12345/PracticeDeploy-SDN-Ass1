@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Kết nối database
-mongoose.connect(process.env.MONGO_URI)
+const mongoUri = process.env.MONGODB_CONNECTION_STRING || process.env.MONGO_URI;
+mongoose.connect(mongoUri)
   .then(() => console.log('✅ DB Connected!'))
   .catch(err => console.log('❌ DB Error: ', err));
 

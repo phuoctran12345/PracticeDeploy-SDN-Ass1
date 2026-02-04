@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 
 // Kết nối MongoDB (Mongoose)
@@ -17,6 +18,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'data/assets'))); // Serve video assets
 app.use(express.urlencoded({ extended: true }));
 
+// Session cho đăng nhập web (User / Admin)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'autorent-pro-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true }, // 7 ngày
+}));
+
+// Gắn user vào mọi view (res.locals.user)
+app.use((req, res, next) => {
+  res.locals.user = req.session?.user || null;
+  next();
+});
+
 // API Routes (JSON)
 const carRoutes = require('./routes/cars');
 const authRoutes = require('./routes/auth');
@@ -32,7 +47,7 @@ app.use('/api/v1/users', userRoutes);
 const viewRoutes = require('./routes/views');
 app.use('/', viewRoutes);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Express server is running on http://localhost:${PORT}`);
+  console.log(`Express server is running on port ${PORT}`);
 });
