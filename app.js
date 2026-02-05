@@ -35,23 +35,28 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
-  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true }, // 7 ngày
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  },
 }));
 
-// Đồng bộ role từ DB mỗi request (tránh session cũ / sai instance hiển thị sai role)
+// Đồng bộ role từ DB mỗi request – chỉ cập nhật từ user cùng id, không ghi đè sang user khác
 app.use(async (req, res, next) => {
   if (req.session && req.session.user && req.session.user.id) {
+    const sessionId = req.session.user.id;
     try {
-      const fresh = await User.findById(req.session.user.id).select('name email role').lean();
-      if (fresh) {
+      const fresh = await User.findById(sessionId).select('name email role').lean();
+      if (fresh && String(fresh._id) === String(sessionId)) {
         req.session.user = {
           id: fresh._id.toString(),
           name: fresh.name,
           email: fresh.email,
           role: fresh.role,
         };
-      } else {
-        // User đã bị xóa hoặc ID không hợp lệ → xóa session để tránh hiển thị role cũ
+      } else if (!fresh) {
         req.session.user = null;
       }
     } catch (e) {

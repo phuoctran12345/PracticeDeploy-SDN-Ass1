@@ -26,13 +26,15 @@
                             <% } %>
 
                               <% if (bookings && bookings.length) { %>
+                                <p class="text-muted small mb-2">Bạn đang xem với vai trò <strong>Owner</strong>. Cột
+                                  "Người đặt xe" là khách đặt thuê — nếu bạn tự đặt xe của mình thì sẽ hiện tên bạn.</p>
                                 <div class="card shadow-sm">
                                   <div class="table-responsive">
                                     <table class="table table-striped table-hover mb-0">
                                       <thead class="table-light">
                                         <tr>
                                           <th>Xe</th>
-                                          <th>Khách</th>
+                                          <th>Người đặt xe <small class="text-muted">(Khách)</small></th>
                                           <th>Bắt đầu</th>
                                           <th>Kết thúc</th>
                                           <th>Tổng tiền</th>
