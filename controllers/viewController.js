@@ -173,14 +173,18 @@ exports.bookingDetail = async (req, res) => {
       .populate('userId', 'name email phone role')
       .populate('carId', 'carId brand model pricePerDay status userId');
     if (!booking) return res.status(404).render('error', { message: 'Không tìm thấy đặt xe' });
-    const currentUserId = req.session && req.session.user ? req.session.user.id : null;
+    const currentUserId = req.session && req.session.user ? String(req.session.user.id) : null;
     const isAdmin = req.session && req.session.user && req.session.user.role === 'admin';
-    const carOwnerId = booking.carId && booking.carId.userId ? booking.carId.userId.toString() : null;
-    const canOwnerConfirm = req.session && req.session.user && req.session.user.role === 'owner' && currentUserId === carOwnerId;
+    const carOwnerId = booking.carId && booking.carId.userId ? String(booking.carId.userId._id || booking.carId.userId) : null;
+    const canOwnerConfirm = !!(
+      req.session && req.session.user &&
+      req.session.user.role === 'owner' &&
+      currentUserId && carOwnerId && currentUserId === carOwnerId
+    );
     res.render('bookings/detail', {
       title: 'Chi tiết đặt xe',
       booking,
-      canOwnerConfirm: !!canOwnerConfirm,
+      canOwnerConfirm,
       isAdmin: !!isAdmin,
     });
   } catch (err) {

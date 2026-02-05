@@ -42,23 +42,24 @@
                 : '–' %>
             </dd>
           </dl>
-          <% if (booking.bookingStatus==='pending' && (typeof isAdmin !=='undefined' && isAdmin)) { %>
-            <form method="POST" action="/admin/bookings/<%= booking._id %>/confirm" class="d-inline">
-              <button type="submit" class="btn btn-success">Xác nhận đơn</button>
-            </form>
-            <form method="POST" action="/admin/bookings/<%= booking._id %>/cancel" class="d-inline">
-              <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
-            </form>
-            <% } else if (booking.bookingStatus==='pending' && (typeof canOwnerConfirm !=='undefined' &&
-              canOwnerConfirm)) { %>
-              <form method="POST" action="/owner/bookings/<%= booking._id %>/confirm" class="d-inline">
+          <% const showConfirmCancel=typeof user !=='undefined' && user && user.role !=='customer' &&
+            booking.bookingStatus==='pending' && (isAdmin || canOwnerConfirm); %>
+            <% if (showConfirmCancel && isAdmin) { %>
+              <form method="POST" action="/admin/bookings/<%= booking._id %>/confirm" class="d-inline">
                 <button type="submit" class="btn btn-success">Xác nhận đơn</button>
               </form>
-              <form method="POST" action="/owner/bookings/<%= booking._id %>/cancel" class="d-inline">
+              <form method="POST" action="/admin/bookings/<%= booking._id %>/cancel" class="d-inline">
                 <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
               </form>
-              <% } %>
-                <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
+              <% } else if (showConfirmCancel && canOwnerConfirm) { %>
+                <form method="POST" action="/owner/bookings/<%= booking._id %>/confirm" class="d-inline">
+                  <button type="submit" class="btn btn-success">Xác nhận đơn</button>
+                </form>
+                <form method="POST" action="/owner/bookings/<%= booking._id %>/cancel" class="d-inline">
+                  <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
+                </form>
+                <% } %>
+                  <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
         </div>
       </div>
     </div>
