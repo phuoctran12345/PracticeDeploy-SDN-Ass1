@@ -42,15 +42,23 @@
                 : '–' %>
             </dd>
           </dl>
-          <% if (typeof user !=='undefined' && user && user.role==='admin' && booking.bookingStatus==='pending' ) { %>
+          <% if (booking.bookingStatus==='pending' && (typeof isAdmin !=='undefined' && isAdmin)) { %>
             <form method="POST" action="/admin/bookings/<%= booking._id %>/confirm" class="d-inline">
               <button type="submit" class="btn btn-success">Xác nhận đơn</button>
             </form>
             <form method="POST" action="/admin/bookings/<%= booking._id %>/cancel" class="d-inline">
               <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
             </form>
-            <% } %>
-              <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
+            <% } else if (booking.bookingStatus==='pending' && (typeof canOwnerConfirm !=='undefined' &&
+              canOwnerConfirm)) { %>
+              <form method="POST" action="/owner/bookings/<%= booking._id %>/confirm" class="d-inline">
+                <button type="submit" class="btn btn-success">Xác nhận đơn</button>
+              </form>
+              <form method="POST" action="/owner/bookings/<%= booking._id %>/cancel" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
+              </form>
+              <% } %>
+                <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
         </div>
       </div>
     </div>

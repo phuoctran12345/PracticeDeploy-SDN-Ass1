@@ -163,9 +163,18 @@ exports.bookingDetail = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
       .populate('userId', 'name email phone role')
-      .populate('carId', 'carId brand model pricePerDay status');
+      .populate('carId', 'carId brand model pricePerDay status userId');
     if (!booking) return res.status(404).render('error', { message: 'Không tìm thấy đặt xe' });
-    res.render('bookings/detail', { title: 'Chi tiết đặt xe', booking });
+    const currentUserId = req.session && req.session.user ? req.session.user.id : null;
+    const isAdmin = req.session && req.session.user && req.session.user.role === 'admin';
+    const carOwnerId = booking.carId && booking.carId.userId ? booking.carId.userId.toString() : null;
+    const canOwnerConfirm = req.session && req.session.user && req.session.user.role === 'owner' && currentUserId === carOwnerId;
+    res.render('bookings/detail', {
+      title: 'Chi tiết đặt xe',
+      booking,
+      canOwnerConfirm: !!canOwnerConfirm,
+      isAdmin: !!isAdmin,
+    });
   } catch (err) {
     res.status(500).render('error', { message: err.message });
   }
@@ -198,11 +207,10 @@ exports.userBookings = async (req, res) => {
 // ----- Owner: booking của xe thuộc owner -----
 exports.ownerBookings = async (req, res) => {
   try {
-    // Đã qua middleware requireRole('owner','admin') nên dùng user đăng nhập
     const userId = req.session.user.id;
     const user = await User.findById(userId);
     if (!user) {
-      return res.render('owner/bookings', { title: 'Booking của Owner', bookings: [], error: 'Không tìm thấy user.' });
+      return res.render('owner/bookings', { title: 'Booking xe của tôi', bookings: [], error: 'Không tìm thấy user.' });
     }
     const cars = await Car.find({ userId });
     const carIds = cars.map((c) => c._id);
@@ -210,7 +218,56 @@ exports.ownerBookings = async (req, res) => {
       .populate('carId', 'carId brand model pricePerDay')
       .populate('userId', 'name email phone')
       .sort({ createdAt: -1 });
-    res.render('owner/bookings', { title: 'Booking của Owner', bookings, owner: user, error: null });
+    res.render('owner/bookings', {
+      title: 'Booking xe của tôi',
+      bookings,
+      owner: user,
+      error: null,
+      ok: req.query.ok,
+      err: req.query.err,
+    });
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};
+
+// Owner xác nhận đơn (chỉ đơn thuộc xe của owner)
+exports.ownerConfirmBooking = async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const booking = await Booking.findById(req.params.id).populate('carId');
+    if (!booking) return res.redirect('/owner/bookings?err=notfound');
+    const cars = await Car.find({ userId });
+    const carIds = cars.map((c) => c._id.toString());
+    const bookingCarId = booking.carId && booking.carId._id ? booking.carId._id.toString() : null;
+    if (!bookingCarId || !carIds.includes(bookingCarId)) {
+      return res.redirect('/owner/bookings?err=forbidden');
+    }
+    if (booking.bookingStatus !== 'pending') return res.redirect('/owner/bookings?err=already');
+    booking.bookingStatus = 'confirmed';
+    await booking.save();
+    res.redirect('/owner/bookings?ok=confirmed');
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};
+
+// Owner hủy đơn (chỉ đơn thuộc xe của owner)
+exports.ownerCancelBooking = async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const booking = await Booking.findById(req.params.id).populate('carId');
+    if (!booking) return res.redirect('/owner/bookings?err=notfound');
+    const cars = await Car.find({ userId });
+    const carIds = cars.map((c) => c._id.toString());
+    const bookingCarId = booking.carId && booking.carId._id ? booking.carId._id.toString() : null;
+    if (!bookingCarId || !carIds.includes(bookingCarId)) {
+      return res.redirect('/owner/bookings?err=forbidden');
+    }
+    if (booking.bookingStatus === 'cancelled') return res.redirect('/owner/bookings?err=already');
+    booking.bookingStatus = 'cancelled';
+    await booking.save();
+    res.redirect('/owner/bookings?ok=cancelled');
   } catch (err) {
     res.status(500).render('error', { message: err.message });
   }

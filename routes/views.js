@@ -33,6 +33,8 @@ router.get('/users/:id/bookings', viewController.userBookings);
 
 // ----- Owner (chỉ role owner hoặc admin) -----
 router.get('/owner/bookings', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerBookings);
+router.post('/owner/bookings/:id/confirm', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerConfirmBooking);
+router.post('/owner/bookings/:id/cancel', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerCancelBooking);
 
 // ----- Admin (chỉ role admin) -----
 router.get('/admin/summary', requireWebAuth, requireRole('admin'), viewController.adminSummary);

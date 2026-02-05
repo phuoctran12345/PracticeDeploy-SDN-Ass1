@@ -1,48 +1,95 @@
 <%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
-<div class="container my-4">
-  <h1 class="mb-4">Booking của Owner</h1>
-  <div class="card shadow-sm mb-4">
-    <div class="card-body">
-      <form method="GET" action="/owner/bookings" class="row g-3 align-items-end">
-        <div class="col-auto">
-          <label class="form-label">UserId (owner)</label>
-          <input type="text" name="userId" class="form-control" placeholder="ObjectId của owner" value="<%= typeof owner !== 'undefined' && owner && owner._id ? owner._id : '' %>" style="width:220px;">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <%- include('../partials/navbar') %>
+
+    <div class="container my-4">
+      <h1 class="mb-4">Booking xe của tôi</h1>
+      <% if (typeof error !=='undefined' && error) { %>
+        <div class="alert alert-danger">
+          <%= error %>
         </div>
-        <div class="col-auto">
-          <button type="submit" class="btn btn-primary">Xem</button>
-        </div>
-      </form>
-      <% if (typeof error !== 'undefined' && error) { %>
-        <div class="alert alert-danger mt-3 mb-0"><%= error %></div>
-      <% } %>
+        <% } %>
+          <% if (typeof ok !=='undefined' && ok==='confirmed' ) { %>
+            <div class="alert alert-success py-2">Đã xác nhận đơn.</div>
+            <% } %>
+              <% if (typeof ok !=='undefined' && ok==='cancelled' ) { %>
+                <div class="alert alert-secondary py-2">Đã hủy đơn.</div>
+                <% } %>
+                  <% if (typeof err !=='undefined' && err==='notfound' ) { %>
+                    <div class="alert alert-danger py-2">Không tìm thấy đơn.</div>
+                    <% } %>
+                      <% if (typeof err !=='undefined' && err==='forbidden' ) { %>
+                        <div class="alert alert-warning py-2">Bạn không có quyền xử lý đơn này.</div>
+                        <% } %>
+                          <% if (typeof err !=='undefined' && err==='already' ) { %>
+                            <div class="alert alert-warning py-2">Đơn đã được xử lý trước đó.</div>
+                            <% } %>
+
+                              <% if (bookings && bookings.length) { %>
+                                <div class="card shadow-sm">
+                                  <div class="table-responsive">
+                                    <table class="table table-striped table-hover mb-0">
+                                      <thead class="table-light">
+                                        <tr>
+                                          <th>Xe</th>
+                                          <th>Khách</th>
+                                          <th>Bắt đầu</th>
+                                          <th>Kết thúc</th>
+                                          <th>Tổng tiền</th>
+                                          <th>Trạng thái</th>
+                                          <th>Thao tác</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% bookings.forEach(function(b) { %>
+                                          <tr>
+                                            <td>
+                                              <%= b.carId ? (b.carId.brand + ' ' + b.carId.model) : '-' %>
+                                            </td>
+                                            <td>
+                                              <%= b.userId ? (b.userId.name + ' / ' + (b.userId.email || '' )) : '-' %>
+                                            </td>
+                                            <td>
+                                              <%= b.startDate ? new Date(b.startDate).toLocaleDateString('vi-VN') : '-'
+                                                %>
+                                            </td>
+                                            <td>
+                                              <%= b.endDate ? new Date(b.endDate).toLocaleDateString('vi-VN') : '-' %>
+                                            </td>
+                                            <td>
+                                              <%= b.totalPrice !=null ? b.totalPrice.toLocaleString('vi-VN') : '-' %> đ
+                                            </td>
+                                            <td>
+                                              <span
+                                                class="badge bg-<%= b.bookingStatus === 'completed' ? 'success' : b.bookingStatus === 'cancelled' ? 'secondary' : b.bookingStatus === 'confirmed' ? 'info' : 'warning text-dark' %>">
+                                                <%= b.bookingStatus %>
+                                              </span>
+                                            </td>
+                                            <td>
+                                              <% if (b.bookingStatus==='pending' ) { %>
+                                                <form method="POST" action="/owner/bookings/<%= b._id %>/confirm"
+                                                  class="d-inline">
+                                                  <button type="submit" class="btn btn-sm btn-success">Xác nhận</button>
+                                                </form>
+                                                <form method="POST" action="/owner/bookings/<%= b._id %>/cancel"
+                                                  class="d-inline">
+                                                  <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger">Hủy</button>
+                                                </form>
+                                                <% } %>
+                                                  <a href="/bookings/<%= b._id %>"
+                                                    class="btn btn-sm btn-outline-primary ms-1">Chi tiết</a>
+                                            </td>
+                                          </tr>
+                                          <% }); %>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                                <% } else { %>
+                                  <div class="alert alert-info">Chưa có đơn đặt xe nào cho xe của bạn. Khách đặt xe
+                                    thuộc danh sách xe của bạn sẽ hiển thị tại đây.</div>
+                                  <% } %>
     </div>
-  </div>
-  <% if (bookings && bookings.length) { %>
-    <div class="card shadow-sm">
-      <div class="table-responsive">
-        <table class="table table-striped table-hover mb-0">
-          <thead class="table-light">
-            <tr><th>Xe</th><th>Khách</th><th>Bắt đầu</th><th>Kết thúc</th><th>Tổng tiền</th><th>Trạng thái</th><th></th></tr>
-          </thead>
-          <tbody>
-            <% bookings.forEach(function(b) { %>
-              <tr>
-                <td><%= b.carId ? (b.carId.brand + ' ' + b.carId.model) : '-' %></td>
-                <td><%= b.userId ? b.userId.name : '-' %></td>
-                <td><%= b.startDate ? new Date(b.startDate).toLocaleDateString('vi-VN') : '-' %></td>
-                <td><%= b.endDate ? new Date(b.endDate).toLocaleDateString('vi-VN') : '-' %></td>
-                <td><%= b.totalPrice != null ? b.totalPrice.toLocaleString('vi-VN') : '-' %> đ</td>
-                <td><span class="badge bg-<%= b.bookingStatus === 'completed' ? 'success' : b.bookingStatus === 'cancelled' ? 'secondary' : 'info' %>"><%= b.bookingStatus %></span></td>
-                <td><a href="/bookings/<%= b._id %>" class="btn btn-sm btn-outline-primary">Chi tiết</a></td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  <% } else if (!error) { %>
-    <div class="alert alert-info">Nhập userId (owner) và bấm Xem, hoặc chưa có booking.</div>
-  <% } %>
-</div>
-<%- include('../partials/footer') %>
+
+    <%- include('../partials/footer') %>
