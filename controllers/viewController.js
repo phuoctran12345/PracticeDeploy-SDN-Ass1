@@ -2,10 +2,18 @@
  * View Controller – render trang EJS cho Car, Booking, User (Chương 1–9)
  * Dùng chung model/ logic với API, chỉ khác trả về HTML thay vì JSON.
  */
+const mongoose = require('mongoose');
 const Car = require('../models/cars');
 const Booking = require('../models/booking');
 const User = require('../models/user');
 const { validateBooking } = require('../Helper files/Validate');
+
+// Helper: tìm xe của owner (hỗ trợ cả userId lưu ObjectId hoặc string trong DB)
+function findCarsByOwnerId(ownerId) {
+  const oid = mongoose.Types.ObjectId.isValid(ownerId) ? new mongoose.Types.ObjectId(ownerId) : null;
+  if (!oid) return Car.find({ userId: ownerId }); // fallback string
+  return Car.find({ $or: [{ userId: oid }, { userId: ownerId }] });
+}
 
 // ----- Trang chủ -----
 exports.home = (req, res) => {
@@ -212,7 +220,7 @@ exports.ownerBookings = async (req, res) => {
     if (!user) {
       return res.render('owner/bookings', { title: 'Booking xe của tôi', bookings: [], error: 'Không tìm thấy user.' });
     }
-    const cars = await Car.find({ userId });
+    const cars = await findCarsByOwnerId(userId);
     const carIds = cars.map((c) => c._id);
     const bookings = await Booking.find({ carId: { $in: carIds } })
       .populate('carId', 'carId brand model pricePerDay')
@@ -237,7 +245,7 @@ exports.ownerConfirmBooking = async (req, res) => {
     const userId = req.session.user.id;
     const booking = await Booking.findById(req.params.id).populate('carId');
     if (!booking) return res.redirect('/owner/bookings?err=notfound');
-    const cars = await Car.find({ userId });
+    const cars = await findCarsByOwnerId(userId);
     const carIds = cars.map((c) => c._id.toString());
     const bookingCarId = booking.carId && booking.carId._id ? booking.carId._id.toString() : null;
     if (!bookingCarId || !carIds.includes(bookingCarId)) {
@@ -258,7 +266,7 @@ exports.ownerCancelBooking = async (req, res) => {
     const userId = req.session.user.id;
     const booking = await Booking.findById(req.params.id).populate('carId');
     if (!booking) return res.redirect('/owner/bookings?err=notfound');
-    const cars = await Car.find({ userId });
+    const cars = await findCarsByOwnerId(userId);
     const carIds = cars.map((c) => c._id.toString());
     const bookingCarId = booking.carId && booking.carId._id ? booking.carId._id.toString() : null;
     if (!bookingCarId || !carIds.includes(bookingCarId)) {
