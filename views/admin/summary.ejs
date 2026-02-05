@@ -1,19 +1,30 @@
 <%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
-<div class="container my-4">
-  <h1 class="mb-4">Tổng hợp Booking (Admin)</h1>
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <p class="lead"><strong>Tổng số booking:</strong> <%= totalBookings %></p>
-      <h5 class="mt-3">Theo trạng thái</h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex justify-content-between">pending <span class="badge bg-warning text-dark"><%= bookingsByStatus.pending || 0 %></span></li>
-        <li class="list-group-item d-flex justify-content-between">confirmed <span class="badge bg-info"><%= bookingsByStatus.confirmed || 0 %></span></li>
-        <li class="list-group-item d-flex justify-content-between">cancelled <span class="badge bg-secondary"><%= bookingsByStatus.cancelled || 0 %></span></li>
-        <li class="list-group-item d-flex justify-content-between">completed <span class="badge bg-success"><%= bookingsByStatus.completed || 0 %></span></li>
-      </ul>
-      <a href="/bookings" class="btn btn-primary mt-3">Xem danh sách đặt xe</a>
+  <%- include('../partials/navbar') %>
+    <div class="container my-4">
+      <h1 class="mb-4">Tổng hợp Booking (Admin)</h1>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <p class="lead"><strong>Tổng số booking:</strong>
+            <%= totalBookings %>
+          </p>
+          <h5 class="mt-3">Theo trạng thái</h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">pending <span class="badge bg-warning text-dark">
+                <%= bookingsByStatus.pending || 0 %>
+              </span></li>
+            <li class="list-group-item d-flex justify-content-between">confirmed <span class="badge bg-info">
+                <%= bookingsByStatus.confirmed || 0 %>
+              </span></li>
+            <li class="list-group-item d-flex justify-content-between">cancelled <span class="badge bg-secondary">
+                <%= bookingsByStatus.cancelled || 0 %>
+              </span></li>
+            <li class="list-group-item d-flex justify-content-between">completed <span class="badge bg-success">
+                <%= bookingsByStatus.completed || 0 %>
+              </span></li>
+          </ul>
+          <a href="/bookings" class="btn btn-outline-primary mt-3">Xem danh sách đặt xe</a>
+          <a href="/admin/bookings" class="btn btn-primary mt-3 ms-2">Quản lý đơn – Xác nhận / Hủy</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>

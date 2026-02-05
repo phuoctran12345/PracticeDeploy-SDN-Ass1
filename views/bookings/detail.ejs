@@ -1,29 +1,57 @@
 <%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
-<div class="container my-4">
-  <h1 class="mb-4">Chi tiết đặt xe</h1>
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <dl class="row mb-0">
-        <dt class="col-sm-3">Mã booking</dt>
-        <dd class="col-sm-9"><%= booking._id %></dd>
-        <dt class="col-sm-3">Trạng thái</dt>
-        <dd class="col-sm-9"><span class="badge bg-<%= booking.bookingStatus === 'completed' ? 'success' : booking.bookingStatus === 'cancelled' ? 'secondary' : 'info' %>"><%= booking.bookingStatus %></span></dd>
-        <dt class="col-sm-3">Thanh toán</dt>
-        <dd class="col-sm-9"><%= booking.paymentStatus %></dd>
-        <dt class="col-sm-3">Ngày bắt đầu</dt>
-        <dd class="col-sm-9"><%= booking.startDate ? new Date(booking.startDate).toLocaleString('vi-VN') : '-' %></dd>
-        <dt class="col-sm-3">Ngày kết thúc</dt>
-        <dd class="col-sm-9"><%= booking.endDate ? new Date(booking.endDate).toLocaleString('vi-VN') : '-' %></dd>
-        <dt class="col-sm-3">Tổng tiền</dt>
-        <dd class="col-sm-9"><%= booking.totalPrice != null ? booking.totalPrice.toLocaleString('vi-VN') : '-' %> đ</dd>
-        <dt class="col-sm-3">Xe</dt>
-        <dd class="col-sm-9"><%= booking.carId ? (booking.carId.brand + ' ' + booking.carId.model + ' – ' + booking.carId.carId + ' (' + (booking.carId.pricePerDay && booking.carId.pricePerDay.toLocaleString('vi-VN')) + ' đ/ngày)') : '–' %></dd>
-        <dt class="col-sm-3">Khách hàng</dt>
-        <dd class="col-sm-9"><%= booking.userId ? (booking.userId.name + ' – ' + booking.userId.email + ' – ' + booking.userId.phone) : '–' %></dd>
-      </dl>
-      <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
+  <%- include('../partials/navbar') %>
+    <div class="container my-4">
+      <h1 class="mb-4">Chi tiết đặt xe</h1>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-3">Mã booking</dt>
+            <dd class="col-sm-9">
+              <%= booking._id %>
+            </dd>
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9"><span
+                class="badge bg-<%= booking.bookingStatus === 'completed' ? 'success' : booking.bookingStatus === 'cancelled' ? 'secondary' : 'info' %>">
+                <%= booking.bookingStatus %>
+              </span></dd>
+            <dt class="col-sm-3">Thanh toán</dt>
+            <dd class="col-sm-9">
+              <%= booking.paymentStatus %>
+            </dd>
+            <dt class="col-sm-3">Ngày bắt đầu</dt>
+            <dd class="col-sm-9">
+              <%= booking.startDate ? new Date(booking.startDate).toLocaleString('vi-VN') : '-' %>
+            </dd>
+            <dt class="col-sm-3">Ngày kết thúc</dt>
+            <dd class="col-sm-9">
+              <%= booking.endDate ? new Date(booking.endDate).toLocaleString('vi-VN') : '-' %>
+            </dd>
+            <dt class="col-sm-3">Tổng tiền</dt>
+            <dd class="col-sm-9">
+              <%= booking.totalPrice !=null ? booking.totalPrice.toLocaleString('vi-VN') : '-' %> đ
+            </dd>
+            <dt class="col-sm-3">Xe</dt>
+            <dd class="col-sm-9">
+              <%= booking.carId ? (booking.carId.brand + ' ' + booking.carId.model + ' – ' + booking.carId.carId + ' ('
+                + (booking.carId.pricePerDay && booking.carId.pricePerDay.toLocaleString('vi-VN')) + ' đ/ngày)' ) : '–'
+                %>
+            </dd>
+            <dt class="col-sm-3">Khách hàng</dt>
+            <dd class="col-sm-9">
+              <%= booking.userId ? (booking.userId.name + ' – ' + booking.userId.email + ' – ' + booking.userId.phone)
+                : '–' %>
+            </dd>
+          </dl>
+          <% if (typeof user !=='undefined' && user && user.role==='admin' && booking.bookingStatus==='pending' ) { %>
+            <form method="POST" action="/admin/bookings/<%= booking._id %>/confirm" class="d-inline">
+              <button type="submit" class="btn btn-success">Xác nhận đơn</button>
+            </form>
+            <form method="POST" action="/admin/bookings/<%= booking._id %>/cancel" class="d-inline">
+              <button type="submit" class="btn btn-outline-danger">Hủy đơn</button>
+            </form>
+            <% } %>
+              <a href="/bookings" class="btn btn-outline-primary">← Danh sách đặt xe</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>

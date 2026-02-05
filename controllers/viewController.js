@@ -237,3 +237,51 @@ exports.adminSummary = async (req, res) => {
     res.status(500).render('error', { message: err.message });
   }
 };
+
+// ----- Admin: danh sách đơn + xác nhận / hủy -----
+exports.adminBookingList = async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate('carId', 'carId brand model pricePerDay status')
+      .populate('userId', 'name email phone')
+      .sort({ createdAt: -1 });
+    res.render('admin/bookings', {
+      title: 'Quản lý đơn đặt xe (Admin)',
+      bookings,
+      ok: req.query.ok,
+      err: req.query.err,
+    });
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};
+
+exports.adminConfirmBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.redirect('/admin/bookings?err=notfound');
+    if (booking.bookingStatus !== 'pending') {
+      return res.redirect('/admin/bookings?err=already');
+    }
+    booking.bookingStatus = 'confirmed';
+    await booking.save();
+    res.redirect('/admin/bookings?ok=confirmed');
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};
+
+exports.adminCancelBooking = async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.redirect('/admin/bookings?err=notfound');
+    if (booking.bookingStatus === 'cancelled') {
+      return res.redirect('/admin/bookings?err=already');
+    }
+    booking.bookingStatus = 'cancelled';
+    await booking.save();
+    res.redirect('/admin/bookings?ok=cancelled');
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};

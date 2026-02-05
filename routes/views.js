@@ -36,5 +36,8 @@ router.get('/owner/bookings', requireWebAuth, requireRole('owner', 'admin'), vie
 
 // ----- Admin (chỉ role admin) -----
 router.get('/admin/summary', requireWebAuth, requireRole('admin'), viewController.adminSummary);
+router.get('/admin/bookings', requireWebAuth, requireRole('admin'), viewController.adminBookingList);
+router.post('/admin/bookings/:id/confirm', requireWebAuth, requireRole('admin'), viewController.adminConfirmBooking);
+router.post('/admin/bookings/:id/cancel', requireWebAuth, requireRole('admin'), viewController.adminCancelBooking);
 
 module.exports = router;
