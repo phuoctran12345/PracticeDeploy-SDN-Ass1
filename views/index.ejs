@@ -38,7 +38,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
             <li class="nav-item"><a class="nav-link active" href="/">Trang chủ</a></li>
             <li class="nav-item"><a class="nav-link" href="/cars">Xe</a></li>
             <li class="nav-item"><a class="nav-link" href="/bookings">Đặt xe</a></li>
@@ -48,34 +48,38 @@
                 <% if (typeof user !=='undefined' && user && user.role==='admin' ) { %>
                   <li class="nav-item"><a class="nav-link" href="/admin/summary">Admin</a></li>
                   <% } %>
+                    <% if (typeof user !=='undefined' && user) { %>
+                      <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle btn btn-outline-light ms-lg-2" href="#"
+                          data-bs-toggle="dropdown"><i class="bi bi-person-circle me-1"></i>
+                          <%= user.name %> <span class="badge bg-light text-dark ms-1">
+                              <%= user.role==='admin' ? 'Admin' : user.role==='owner' ? 'Owner' : 'Khách' %>
+                            </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li><a class="dropdown-item" href="/users/<%= user.id %>">Tài khoản</a></li>
+                          <li><a class="dropdown-item" href="/users/<%= user.id %>/bookings">Đơn của tôi</a></li>
+                          <% if (user.role==='owner' || user.role==='admin' ) { %>
+                            <li><a class="dropdown-item" href="/owner/bookings">Booking xe của tôi</a></li>
+                            <% } %>
+                              <li>
+                                <hr class="dropdown-divider">
+                              </li>
+                              <li><a class="dropdown-item text-danger" href="/logout">Đăng xuất</a></li>
+                        </ul>
+                      </li>
+                      <% } else { %>
+                        <li class="nav-item"><a class="nav-link" href="/login"><i
+                              class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register"><i
+                              class="bi bi-person-plus me-1"></i>Đăng ký</a></li>
+                        <% } %>
+                          <li class="nav-item ms-lg-2">
+                            <a href="/bookings/new" class="btn btn-primary">
+                              <i class="bi bi-calendar-check me-1"></i>Đặt xe ngay
+                            </a>
+                          </li>
           </ul>
-          <% if (typeof user !=='undefined' && user) { %>
-            <div class="dropdown ms-lg-3">
-              <a class="btn btn-outline-light dropdown-toggle" href="#" data-bs-toggle="dropdown"><i
-                  class="bi bi-person-circle me-1"></i>
-                <%= user.name %> <span class="badge bg-light text-dark ms-1">
-                    <%= user.role==='admin' ? 'Admin' : user.role==='owner' ? 'Owner' : 'Khách' %>
-                  </span>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="/users/<%= user.id %>">Tài khoản</a></li>
-                <li><a class="dropdown-item" href="/users/<%= user.id %>/bookings">Đơn của tôi</a></li>
-                <% if (user.role==='owner' || user.role==='admin' ) { %>
-                  <li><a class="dropdown-item" href="/owner/bookings">Booking xe của tôi</a></li>
-                  <% } %>
-                    <li>
-                      <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item text-danger" href="/logout">Đăng xuất</a></li>
-              </ul>
-            </div>
-            <% } else { %>
-              <a href="/login" class="btn btn-outline-light ms-lg-2">Đăng nhập</a>
-              <a href="/register" class="btn btn-light ms-lg-2">Đăng ký</a>
-              <% } %>
-                <a href="/bookings/new" class="btn btn-primary ms-lg-2">
-                  <i class="bi bi-calendar-check me-1"></i>Đặt xe ngay
-                </a>
         </div>
       </div>
     </nav>
