@@ -37,6 +37,7 @@ Trong project Railway → **Variables** → thêm đúng tên như trong `.env` 
 | `MONGODB_CONNECTION_STRING` | Có | Chuỗi kết nối MongoDB (Atlas/Azure). Copy từ .env |
 | `JWT_SECRET_KEY` | Có | Secret cho JWT. Copy từ .env |
 | `SESSION_SECRET` | Nên có | Secret cho session web (đặt chuỗi bí mật bất kỳ nếu chưa có) |
+| `COOKIE_SECURE` | Không | Nếu **đăng nhập không được** (sau khi submit vẫn thấy Khách): set `COOKIE_SECURE=false` (khi truy cập qua HTTP hoặc proxy đặc biệt) |
 | `PORT` | Không | Railway tự gán, không cần tạo |
 
 App đã đọc `MONGODB_CONNECTION_STRING` và `JWT_SECRET_KEY` giống .env local.
@@ -45,6 +46,8 @@ App đã đọc `MONGODB_CONNECTION_STRING` và `JWT_SECRET_KEY` giống .env lo
 
 - Railway sẽ build và chạy, sau đó cho bạn **URL public** (dạng `https://xxx.up.railway.app`).
 - Truy cập URL đó = vào luôn cả **web EJS** và **API** (vì cùng 1 app Express).
+
+**Đăng nhập không được?** (submit xong vẫn thấy "Khách" / chưa đăng nhập): App đã bật `trust proxy` và cookie có thể tắt Secure. Trên Railway Variables thử thêm `COOKIE_SECURE=false` rồi redeploy. Nếu dùng đúng URL HTTPS của Railway thì thường không cần.
 
 **Tóm tắt Backend:** 1 app Express trên Railway = cả giao diện (EJS) + API. Frontend (EJS) đang chạy cùng backend trên Railway.
 

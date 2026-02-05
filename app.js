@@ -7,6 +7,9 @@ const app = express();
 // Kết nối MongoDB (Mongoose)
 require('./db');
 
+// Phía sau proxy (Railway, Render,…) để session/cookie hoạt động đúng
+app.set('trust proxy', 1);
+
 // Import các models để đảm bảo chúng được đăng ký với Mongoose trước khi sử dụng
 require('./models/user');
 require('./models/cars');
@@ -39,7 +42,8 @@ app.use(session({
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    // Chỉ bật Secure khi dùng HTTPS. Nếu deploy HTTP (hoặc local production) đăng nhập không được → set COOKIE_SECURE=false
+    secure: process.env.COOKIE_SECURE !== 'false' && process.env.NODE_ENV === 'production',
   },
 }));
 
