@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo').default;
 const app = express();
 
 // Kết nối MongoDB (Mongoose)
@@ -11,6 +12,8 @@ require('./models/user');
 require('./models/cars');
 require('./models/booking');
 
+const User = require('./models/user');
+
 // ----- View EJS (Chương 1–9: UI) -----
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -18,13 +21,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'data/assets'))); // Serve video assets
 app.use(express.urlencoded({ extended: true }));
 
-// Session cho đăng nhập web (User / Admin)
+// Session cho đăng nhập web – lưu vào MongoDB để tránh nhảy role khi reload (nhiều instance Railway)
+const sessionStore = process.env.MONGODB_CONNECTION_STRING
+  ? MongoStore.create({ mongoUrl: process.env.MONGODB_CONNECTION_STRING })
+  : undefined;
+if (!sessionStore) {
+  console.warn('WARNING: Session đang dùng MemoryStore (không phù hợp production). Trên Railway hãy set biến môi trường MONGODB_CONNECTION_STRING để lưu session vào MongoDB.');
+}
 app.use(session({
   secret: process.env.SESSION_SECRET || 'autorent-pro-session-secret',
   resave: false,
   saveUninitialized: false,
+  store: sessionStore,
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true }, // 7 ngày
 }));
+
+// Đồng bộ role từ DB mỗi request (tránh session cũ / sai instance hiển thị sai role)
+app.use(async (req, res, next) => {
+  if (req.session && req.session.user && req.session.user.id) {
+    try {
+      const fresh = await User.findById(req.session.user.id).select('name email role').lean();
+      if (fresh) {
+        req.session.user = {
+          id: fresh._id.toString(),
+          name: fresh.name,
+          email: fresh.email,
+          role: fresh.role,
+        };
+      }
+    } catch (e) { /* giữ session cũ nếu lỗi DB */ }
+  }
+  next();
+});
 
 // Gắn user vào mọi view (res.locals.user)
 app.use((req, res, next) => {

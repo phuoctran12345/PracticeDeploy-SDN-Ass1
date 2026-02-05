@@ -261,7 +261,8 @@ exports.ownerBookings = async (req, res) => {
       return res.render('owner/bookings', { title: 'Booking xe của tôi', bookings: [], error: 'Không tìm thấy user.' });
     }
     const cars = await findCarsByOwnerId(userId);
-    const carIds = cars.map((c) => c._id);
+    // Chuẩn hóa carIds thành ObjectId để khớp với booking.carId (tránh lỗi khi DB lưu string/ObjectId lẫn lộn)
+    const carIds = cars.map((c) => (mongoose.Types.ObjectId.isValid(c._id) ? new mongoose.Types.ObjectId(c._id) : c._id));
     const bookings = await Booking.find({ carId: { $in: carIds } })
       .populate('carId', 'carId brand model pricePerDay')
       .populate('userId', 'name email phone')
