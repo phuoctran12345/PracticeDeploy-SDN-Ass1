@@ -9,7 +9,81 @@ const { validateBooking } = require('../Helper files/Validate');
 
 // ----- Trang chủ -----
 exports.home = (req, res) => {
-  res.render('index', { title: 'AutoRent Pro – Thuê xe' });
+  const err = req.query.err === 'forbidden' ? 'Bạn không có quyền truy cập trang đó.' : null;
+  res.render('index', { title: 'AutoRent Pro – Thuê xe', err });
+};
+
+// ----- Auth (Đăng nhập / Đăng ký web – session) -----
+exports.showLogin = (req, res) => {
+  if (req.session?.user) return res.redirect('/');
+  res.render('auth/login', { title: 'Đăng nhập', error: null });
+};
+
+exports.showRegister = (req, res) => {
+  if (req.session?.user) return res.redirect('/');
+  res.render('auth/register', { title: 'Đăng ký', error: null });
+};
+
+exports.postLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.render('auth/login', { title: 'Đăng nhập', error: 'Vui lòng nhập email và mật khẩu.' });
+    }
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) {
+      return res.render('auth/login', { title: 'Đăng nhập', error: 'Email hoặc mật khẩu không đúng.' });
+    }
+    const match = await user.comparePassword(password);
+    if (!match) {
+      return res.render('auth/login', { title: 'Đăng nhập', error: 'Email hoặc mật khẩu không đúng.' });
+    }
+    req.session.user = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+    const redirectTo = req.query.redirect || '/';
+    res.redirect(redirectTo);
+  } catch (err) {
+    res.render('auth/login', { title: 'Đăng nhập', error: err.message || 'Lỗi đăng nhập.' });
+  }
+};
+
+exports.postRegister = async (req, res) => {
+  try {
+    const { name, email, phone, password, confirmPassword } = req.body;
+    if (!name || !email || !phone || !password) {
+      return res.render('auth/register', { title: 'Đăng ký', error: 'Vui lòng điền đủ: tên, email, SĐT, mật khẩu.' });
+    }
+    if (password.length < 6) {
+      return res.render('auth/register', { title: 'Đăng ký', error: 'Mật khẩu tối thiểu 6 ký tự.' });
+    }
+    if (password !== confirmPassword) {
+      return res.render('auth/register', { title: 'Đăng ký', error: 'Mật khẩu và xác nhận mật khẩu không khớp.' });
+    }
+    const existing = await User.findOne({ email });
+    if (existing) {
+      return res.render('auth/register', { title: 'Đăng ký', error: 'Email này đã được sử dụng.' });
+    }
+    const user = new User({ name, email, phone, password, role: 'customer' });
+    await user.save();
+    req.session.user = {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    };
+    res.redirect('/');
+  } catch (err) {
+    res.render('auth/register', { title: 'Đăng ký', error: err.message || 'Lỗi đăng ký.' });
+  }
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy(() => {});
+  res.redirect('/');
 };
 
 // ----- Module Car -----
@@ -60,7 +134,9 @@ exports.bookingCreateForm = async (req, res) => {
 };
 
 exports.bookingCreate = async (req, res) => {
-  const { carId, userId, startDate, endDate } = req.body;
+  let { carId, userId, startDate, endDate } = req.body;
+  // Nếu đã đăng nhập, bắt buộc đặt xe cho chính mình
+  if (req.session?.user) userId = req.session.user.id;
   const cars = await Car.find({ status: 'AVAILABLE' });
   const users = await User.find({ role: 'customer' });
   const payload = { title: 'Đặt xe', cars, users };
@@ -122,13 +198,11 @@ exports.userBookings = async (req, res) => {
 // ----- Owner: booking của xe thuộc owner -----
 exports.ownerBookings = async (req, res) => {
   try {
-    const userId = req.query.userId;
-    if (!userId) {
-      return res.render('owner/bookings', { title: 'Booking của Owner', bookings: [], error: 'Thiếu userId (query: ?userId=...)' });
-    }
+    // Đã qua middleware requireRole('owner','admin') nên dùng user đăng nhập
+    const userId = req.session.user.id;
     const user = await User.findById(userId);
-    if (!user || user.role !== 'owner') {
-      return res.render('owner/bookings', { title: 'Booking của Owner', bookings: [], error: 'User không tồn tại hoặc không phải owner.' });
+    if (!user) {
+      return res.render('owner/bookings', { title: 'Booking của Owner', bookings: [], error: 'Không tìm thấy user.' });
     }
     const cars = await Car.find({ userId });
     const carIds = cars.map((c) => c._id);
