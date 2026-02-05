@@ -88,6 +88,14 @@ Mở trình duyệt:
 - **Owner:** Quản lý xe của mình; xem booking liên quan xe mình (`/api/v1/bookings/owner/bookings`).
 - **Admin:** Xem toàn hệ thống, tổng hợp booking, hủy booking bất kỳ.
 
+## Session – Một trình duyệt một tài khoản
+
+Web (EJS) dùng **session lưu trong cookie** (theo chuẩn bảo mật). Mọi tab cùng một trình duyệt dùng chung một cookie → **chỉ có một tài khoản đăng nhập**. Nếu mở tab khác và đăng nhập bằng tài khoản khác (vd: customer), session sẽ bị ghi đè và **mọi tab** sẽ thấy tài khoản mới (vd: badge "Khách").
+
+**Cách test nhiều role (Owner + Customer):**
+- **Cách 1:** Đăng xuất hết, rồi chỉ đăng nhập một tài khoản (vd: owner) để test.
+- **Cách 2:** Tab 1 = trình duyệt thường (owner), Tab 2 = **cửa sổ ẩn danh** hoặc trình duyệt khác (customer) — mỗi nơi có cookie riêng.
+
 ## Business rules
 
 - Ngày bắt đầu thuê không được trong quá khứ; ngày kết thúc phải sau ngày bắt đầu.
