@@ -32,6 +32,9 @@ router.get('/users/:id', viewController.userProfile);
 router.get('/users/:id/bookings', viewController.userBookings);
 
 // ----- Owner (chỉ role owner hoặc admin) -----
+router.get('/owner/cars', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerCarList);
+router.get('/owner/cars/new', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerCarCreateForm);
+router.post('/owner/cars', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerCarCreate);
 router.get('/owner/bookings', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerBookings);
 router.post('/owner/bookings/:id/confirm', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerConfirmBooking);
 router.post('/owner/bookings/:id/cancel', requireWebAuth, requireRole('owner', 'admin'), viewController.ownerCancelBooking);

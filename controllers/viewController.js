@@ -212,6 +212,46 @@ exports.userBookings = async (req, res) => {
   }
 };
 
+// ----- Owner: Xe của tôi (list + thêm xe) -----
+exports.ownerCarList = async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+    const cars = await findCarsByOwnerId(userId);
+    res.render('owner/cars', { title: 'Xe của tôi', cars });
+  } catch (err) {
+    res.status(500).render('error', { message: err.message });
+  }
+};
+
+exports.ownerCarCreateForm = (req, res) => {
+  res.render('owner/car-new', { title: 'Thêm xe', error: null });
+};
+
+exports.ownerCarCreate = async (req, res) => {
+  try {
+    const { carId, brand, model, pricePerDay, status } = req.body;
+    if (!carId || !brand || !model || !pricePerDay) {
+      return res.render('owner/car-new', { title: 'Thêm xe', error: 'Vui lòng điền đủ: Mã xe, Hãng, Model, Giá/ngày.' });
+    }
+    const existing = await Car.findOne({ carId: carId.trim() });
+    if (existing) {
+      return res.render('owner/car-new', { title: 'Thêm xe', error: 'Mã xe này đã tồn tại.' });
+    }
+    const car = new Car({
+      carId: carId.trim(),
+      brand: brand.trim(),
+      model: model.trim(),
+      pricePerDay: Number(pricePerDay),
+      status: (status && ['AVAILABLE', 'RENTED', 'MAINTENANCE'].includes(status)) ? status : 'AVAILABLE',
+      userId: req.session.user.id,
+    });
+    await car.save();
+    res.redirect('/owner/cars');
+  } catch (err) {
+    res.render('owner/car-new', { title: 'Thêm xe', error: err.message || 'Lỗi thêm xe.' });
+  }
+};
+
 // ----- Owner: booking của xe thuộc owner -----
 exports.ownerBookings = async (req, res) => {
   try {
@@ -230,6 +270,7 @@ exports.ownerBookings = async (req, res) => {
       title: 'Booking xe của tôi',
       bookings,
       owner: user,
+      carsCount: cars.length,
       error: null,
       ok: req.query.ok,
       err: req.query.err,

@@ -43,6 +43,7 @@
             <li class="nav-item"><a class="nav-link" href="/cars">Xe</a></li>
             <li class="nav-item"><a class="nav-link" href="/bookings">Đặt xe</a></li>
             <% if (typeof user !=='undefined' && user && (user.role==='owner' || user.role==='admin' )) { %>
+              <li class="nav-item"><a class="nav-link" href="/owner/cars">Xe của tôi</a></li>
               <li class="nav-item"><a class="nav-link" href="/owner/bookings">Booking xe của tôi</a></li>
               <% } %>
                 <% if (typeof user !=='undefined' && user && user.role==='admin' ) { %>
@@ -60,6 +61,7 @@
                           <li><a class="dropdown-item" href="/users/<%= user.id %>">Tài khoản</a></li>
                           <li><a class="dropdown-item" href="/users/<%= user.id %>/bookings">Đơn của tôi</a></li>
                           <% if (user.role==='owner' || user.role==='admin' ) { %>
+                            <li><a class="dropdown-item" href="/owner/cars">Xe của tôi</a></li>
                             <li><a class="dropdown-item" href="/owner/bookings">Booking xe của tôi</a></li>
                             <% } %>
                               <li>

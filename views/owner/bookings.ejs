@@ -87,8 +87,17 @@
                                   </div>
                                 </div>
                                 <% } else { %>
-                                  <div class="alert alert-info">Chưa có đơn đặt xe nào cho xe của bạn. Khách đặt xe
-                                    thuộc danh sách xe của bạn sẽ hiển thị tại đây.</div>
+                                  <div class="alert alert-info">
+                                    <% if (typeof carsCount !=='undefined' && carsCount===0) { %>
+                                      <strong>Bạn chưa có xe nào.</strong> Thêm xe tại <a href="/owner/cars/new">Xe của
+                                        tôi → Thêm xe</a>, sau đó khách đặt xe sẽ hiện tại đây để bạn duyệt.
+                                      <% } else { %>
+                                        Chưa có đơn đặt xe nào cho xe của bạn. Khách đặt xe thuộc danh sách xe của bạn
+                                        sẽ hiển thị tại đây.
+                                        <% } %>
+                                          <p class="mb-0 mt-2"><a href="/owner/cars"
+                                              class="btn btn-sm btn-outline-primary">Xe của tôi</a></p>
+                                  </div>
                                   <% } %>
     </div>
 

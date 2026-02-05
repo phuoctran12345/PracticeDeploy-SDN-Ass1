@@ -1,0 +1,46 @@
+<%- include('../partials/header') %>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <%- include('../partials/navbar') %>
+
+    <div class="container my-4">
+      <h1 class="mb-4">Thêm xe</h1>
+      <% if (typeof error !=='undefined' && error) { %>
+        <div class="alert alert-danger">
+          <%= error %>
+        </div>
+        <% } %>
+          <div class="card shadow-sm" style="max-width: 500px;">
+            <div class="card-body">
+              <form method="POST" action="/owner/cars">
+                <div class="mb-3">
+                  <label class="form-label">Mã xe (duy nhất)</label>
+                  <input type="text" name="carId" class="form-control" placeholder="VD: CAR-201" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Hãng</label>
+                  <input type="text" name="brand" class="form-control" placeholder="VD: Toyota" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Model</label>
+                  <input type="text" name="model" class="form-control" placeholder="VD: Camry" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Giá thuê / ngày (VNĐ)</label>
+                  <input type="number" name="pricePerDay" class="form-control" placeholder="800000" min="1" required>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Trạng thái</label>
+                  <select name="status" class="form-select">
+                    <option value="AVAILABLE">AVAILABLE</option>
+                    <option value="RENTED">RENTED</option>
+                    <option value="MAINTENANCE">MAINTENANCE</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Thêm xe</button>
+                <a href="/owner/cars" class="btn btn-outline-secondary ms-2">Hủy</a>
+              </form>
+            </div>
+          </div>
+    </div>
+
+    <%- include('../partials/footer') %>
