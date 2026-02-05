@@ -25,8 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 const sessionStore = process.env.MONGODB_CONNECTION_STRING
   ? MongoStore.create({ mongoUrl: process.env.MONGODB_CONNECTION_STRING })
   : undefined;
-if (!sessionStore) {
-  console.warn('WARNING: Session đang dùng MemoryStore (không phù hợp production). Trên Railway hãy set biến môi trường MONGODB_CONNECTION_STRING để lưu session vào MongoDB.');
+if (sessionStore) {
+  console.log('Session store: MongoDB (ổn định role khi reload)');
+} else {
+  console.warn('WARNING: Session đang dùng MemoryStore (không phù hợp production). Trên Railway hãy set MONGODB_CONNECTION_STRING để lưu session vào MongoDB.');
 }
 app.use(session({
   secret: process.env.SESSION_SECRET || 'autorent-pro-session-secret',
@@ -48,8 +50,13 @@ app.use(async (req, res, next) => {
           email: fresh.email,
           role: fresh.role,
         };
+      } else {
+        // User đã bị xóa hoặc ID không hợp lệ → xóa session để tránh hiển thị role cũ
+        req.session.user = null;
       }
-    } catch (e) { /* giữ session cũ nếu lỗi DB */ }
+    } catch (e) {
+      req.session.user = null;
+    }
   }
   next();
 });
